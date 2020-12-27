@@ -25,6 +25,9 @@ const calculator = {
 // -We need the contents of displayValue to be shown at all times. So we
 //  must create a function that updates the screen with the values of displayValue
 //  every time an operation is performed.
+// - document.querySelector(selectors); -- The Document method querySelector() returns
+//   the first Element within the document that matches the specified selector,
+//   or group of selectors. If no matches are found, null is returned.
 
 function updateDisplay() {
     // Select the element with the class of 'calculator-screen'
@@ -35,4 +38,3 @@ function updateDisplay() {
 
 updateDisplay();
 
-//

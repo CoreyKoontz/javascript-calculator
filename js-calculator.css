@@ -1,0 +1,47 @@
+/*commenting in CSS*/
+
+/* ########## Calculator using CSS Grid ############*/
+
+/* sources: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout
+            https://freshman.tech/css-grid-calculator/
+ */
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box; /* -ensures that the padding and boarder of an
+                                element no longer increases its width*/
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+/* Now we must add the styles to center and and give it a boarder
+with a fixed width.
+ */
+
+.calculator {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+}
+
+/* Styling the calculator screen*/
+
+.calculator-screen {
+    width: 100%;
+    font-size: 5rem; /* rem is a size in reference to the html root element*/
+    height: 80px;
+    border: none;
+    background-color: #252525;
+    color: #fff;
+    text-align: right;
+    padding-right: 20px;
+    padding-left: 10px;
+}
