@@ -22,6 +22,8 @@ const calculator = {
     operator: null, // -Stores the operator for an expression.
 };
 
+//******* Updating the Display *************************************************
+
 // -We need the contents of displayValue to be shown at all times. So we
 //  must create a function that updates the screen with the values of displayValue
 //  every time an operation is performed.
@@ -37,4 +39,12 @@ function updateDisplay() {
 }
 
 updateDisplay();
+
+//******* Handling Key Presses ***************************************************************
+
+// -The four sets of keys on the calculator are: digits (1-9), operators (+, -, *, /, =),
+//  the decimal point(.) and a reset key (AC).
+
+const keys = document.querySelector('.calculator-keys');
+keys.addEventListener('click', (event) =>{})
 
