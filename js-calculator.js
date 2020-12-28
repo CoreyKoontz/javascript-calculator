@@ -1,8 +1,8 @@
 "use strict"
 
 
-// Reference:  https://freshman.tech/calculator/
-// Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects
+// Reference (code found here):  https://freshman.tech/calculator/
+// Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide
 
 //#####################  Building A Calculator  #######################################################################################
 
@@ -29,10 +29,19 @@ const calculator = {
 // displayValue is a non-zero number, the digit is appended to it through string concatenation.
 
 function inputDigit(digit) {
-    const {displayValue } = calculator;
-    calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
+    const { displayValue, waitingForSecondOperand } = calculator;
+    if (waitingForSecondOperand === true) {
+        calculator.displayValue = digit;
+        calculator.waitingForSecondOperand = false;
+    } else {
+        calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
+    }
+    console.log(calculator);
 }
 //******* Input a Decimal Point ************************************************
+
+// The includes() method is used to check if displayValue does not already contain a decimal
+// point. If so, a dot is appended to the number. Otherwise, the function exits.
 
 function inputDecimal(dot) {
     // If the `displayValue` property does not contain a decimal point
@@ -43,14 +52,39 @@ function inputDecimal(dot) {
     }
 }
 
+//******* Handling Operators ***************************************************
+
+// -When an operator key is pressed, the contents of displayValue is converted to a floating-point
+//  number and its value is stored in firstOperand property.
+// -The operator property is also set to whatever operator key was clicked while
+//  waitingForSecondOperand is set to true which indicates that the first operand
+//  has been entered and whatever digits the user enters next will constitute the second operand.
+
+function handleOperator (nextOperator) {
+    // Destructure the properties on the calculator object
+    const { firstOperand, displayValue, operator } = calculator
+    // 'parseFloat' converts the string contents of 'displayValue'
+    // to a floating-point number.
+    const inputValue = parseFloat(displayValue);
+
+    //verify that 'firstOperand' is null and that the 'inputValue' is not a 'NaN' value
+    if (firstOperand === null && !isNaN(inputValue)) {
+        // update the firstOperand property
+        calculator.firstOperand = inputValue;
+    }
+    calculator.waitingForSecondOperand = true;
+    calculator.operator = nextOperator;
+    console.log(calculator);
+}
+
 //******* Updating the Display *************************************************
 
 // -We need the contents of displayValue to be shown at all times. So we
 //  must create a function that updates the screen with the values of displayValue
 //  every time an operation is performed.
-// - document.querySelector(selectors); -- The Document method querySelector() returns
-//   the first Element within the document (html page) that matches the specified selector,
-//   or group of selectors. If no matches are found, null is returned.
+// -document.querySelector(selectors); -- The Document method querySelector() returns
+//  the first Element within the document (html page) that matches the specified selector,
+//  or group of selectors. If no matches are found, null is returned.
 
 function updateDisplay() {
     // Select the element with the class of 'calculator-screen'
@@ -65,7 +99,7 @@ updateDisplay();
 
 // -The four sets of keys on the calculator are: digits (1-9), operators (+, -, *, /, =),
 //  the decimal point(.) and a reset key (AC).
-// -arrow functions (=>) allow for shorter function syntax
+// -arrow functions (=>) allow for shorter function syntax (!! Not supported by all browsers !!)
 // -.addEventListener -The EventTarget method addEventListener() sets up a function
 //  that will be called whenever the specified event is delivered to the target.
 
@@ -82,12 +116,14 @@ keys.addEventListener('click', (event) => {
     }
 
     if (target.classList.contains('operator')) {
-        console.log('operator', target.value);
+        handleOperator(target.value);
+        updateDisplay();
         return;
     }
 
     if (target.classList.contains('decimal')) {
-        console.log('decimal', target.value);
+        inputDecimal(target.value);
+        updateDisplay();
         return;
     }
     if (target.classList.contains('all-clear')) {
