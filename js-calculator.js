@@ -4,6 +4,8 @@
 // Reference (code found here):  https://freshman.tech/calculator/
 // Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide
 
+// *** Use the Firefox browser for its development tools ***
+
 //#####################  Building A Calculator  #######################################################################################
 
 // -First we are creating an object (calculator) to keep track of the
@@ -30,6 +32,7 @@ const calculator = {
 
 function inputDigit(digit) {
     const { displayValue, waitingForSecondOperand } = calculator;
+
     if (waitingForSecondOperand === true) {
         calculator.displayValue = digit;
         calculator.waitingForSecondOperand = false;
@@ -71,12 +74,38 @@ function handleOperator (nextOperator) {
     if (firstOperand === null && !isNaN(inputValue)) {
         // update the firstOperand property
         calculator.firstOperand = inputValue;
+    } else if (operator) {
+        const result = calculate(firstOperand, inputValue, operator)
+        //The else if block added to handleOperator checks if the operator property
+        // has been assigned an operator. If so, the calculate function is invoked and
+        // the result is saved in the result variable.
+        calculator.displayValue = String(result);
+        calculator.firstOperand = result;
     }
     calculator.waitingForSecondOperand = true;
     calculator.operator = nextOperator;
     console.log(calculator);
 }
+//******* When User Hits an Operator After Entering the Second Operand *********
 
+// -This is where the actual math part comes in
+// -This takes the takes the first operand, second
+//  operand and operator as arguments and checks the
+//  value of the operator to determine how the expression should be evaluated.
+
+function calculate(firstOperand, secondOperand, operator){
+    if (operator === '+') {
+    return firstOperand + secondOperand;
+    } else if (operator === '-') {
+        return firstOperand - secondOperand;
+    } else if (operator === '*') {
+        return firstOperand * secondOperand;
+    }else if (operator === '/') {
+        return firstOperand / secondOperand;
+    }
+
+    return secondOperand;
+}
 //******* Updating the Display *************************************************
 
 // -We need the contents of displayValue to be shown at all times. So we
