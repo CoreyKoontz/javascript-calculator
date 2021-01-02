@@ -47,6 +47,17 @@ function inputDigit(digit) {
 // point. If so, a dot is appended to the number. Otherwise, the function exits.
 
 function inputDecimal(dot) {
+    // If waitingForSecondOperand is set to true and a decimal
+    // point is entered, displayValue becomes 0. and
+    // waitingForSecondOperand is set to false so that any
+    // additional digits are appended as part of the second operand. This
+    // ensures that if you input a decimal after selecting the operator, it
+    // will be added to the second operand and not the first.
+    if (calculator.waitingForSecondOperand === true) {
+        calculator.displayValue = '0.';
+        calculator.waitingForSecondOperand = false;
+        return;
+    }
     // If the `displayValue` property does not contain a decimal point
     if (!calculator.displayValue.includes(dot)) {
         // Append the decimal point
@@ -70,8 +81,16 @@ function handleOperator (nextOperator) {
     // to a floating-point number.
     const inputValue = parseFloat(displayValue);
 
+    // The if checks if an operator already exists and
+    // if waitingForSecondOperand is set to true and if so
+    // the value of the operator property is replaced with the new operator
+    if (operator && calculator.waitingForSecondOperand) {
+        calculator.operator = nextOperator;
+        console.log(calculator);
+        return;
+    }
     //verify that 'firstOperand' is null and that the 'inputValue' is not a 'NaN' value
-    if (firstOperand === null && !isNaN(inputValue)) {
+    if (firstOperand == null && !isNaN(inputValue)) {
         // update the firstOperand property
         calculator.firstOperand = inputValue;
     } else if (operator) {
@@ -100,11 +119,21 @@ function calculate(firstOperand, secondOperand, operator){
         return firstOperand - secondOperand;
     } else if (operator === '*') {
         return firstOperand * secondOperand;
-    }else if (operator === '/') {
+    } else if (operator === '/') {
         return firstOperand / secondOperand;
     }
 
     return secondOperand;
+}
+
+//******* Reset the Calculator *************************************************
+
+function resetCalculator() {
+    calculator.displayValue = '0';
+    calculator.firstOperand = null;
+    calculator.waitingForSecondOperand = false;
+    calculator.operator = null;
+    console.log(calculator);
 }
 //******* Updating the Display *************************************************
 
@@ -156,7 +185,8 @@ keys.addEventListener('click', (event) => {
         return;
     }
     if (target.classList.contains('all-clear')) {
-        console.log('clear', target.value);
+        resetCalculator();
+        updateDisplay();
         return;
     }
 
